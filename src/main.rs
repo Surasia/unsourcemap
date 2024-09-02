@@ -7,11 +7,9 @@ use loader::{parse_source_map, parse_source_map_from_string, save_source_content
 
 #[derive(Parser, Debug)]
 #[command(name = "Javascript Source Map Parser")]
-#[command(
-    version,
-    about = "Small command line utility to work with parsing JavaScript source map files."
-)]
-struct Args {
+#[command(version, about)]
+/// Small command line utility to work with parsing JavaScript source map files.
+struct Unsourcemap {
     #[arg(short, long)]
     /// Path to source map file (optional).
     file_path: Option<String>,
@@ -27,11 +25,14 @@ struct Args {
 }
 
 fn main() -> Result<()> {
-    let args = Args::parse();
+    let args = Unsourcemap::parse();
     let parsed = if let Some(file_path) = args.file_path {
         parse_source_map(&file_path)?
     } else if let Some(source_map) = args.source_map {
         parse_source_map_from_string(&source_map)?
+    } else if let Some(url) = args.url {
+        let response = minreq::get(url).send()?;
+        parse_source_map_from_string(response.as_str()?)?
     } else {
         anyhow::bail!("Either file_path or source_map must be provided");
     };
