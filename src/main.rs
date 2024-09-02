@@ -34,7 +34,7 @@ fn main() -> Result<()> {
         let response = minreq::get(url).send()?;
         parse_source_map_from_string(response.as_str()?)?
     } else {
-        anyhow::bail!("Either file_path or source_map must be provided");
+        anyhow::bail!("Either file_path, url or source_map must be provided");
     };
 
     if let Some(sources_content) = parsed.map_data.sources_content {
