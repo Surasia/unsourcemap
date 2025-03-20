@@ -3,6 +3,7 @@ name = "unsourcemap"
 version = "0.2.1"
 edition = "2021"
 license = "Unlicense"
+readme = "README.md"
 
 [dependencies]
 anyhow = "1.0.97"
