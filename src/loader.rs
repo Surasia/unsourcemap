@@ -6,7 +6,7 @@ use anyhow::{bail, Result};
 use std::{
     fs::File,
     io::{BufReader, Write},
-    path::Path,
+    path::{Path, PathBuf},
 };
 use thiserror::Error;
 
@@ -32,7 +32,7 @@ fn create_source_map(parsed: SourceMapFile) -> Result<SourceMap> {
     })
 }
 
-pub fn parse_source_map(file_path: &str) -> Result<SourceMap> {
+pub fn parse_source_map<T: AsRef<Path>>(file_path: T) -> Result<SourceMap> {
     let file = File::open(file_path)?;
     let reader = BufReader::new(file);
     let parsed: SourceMapFile = serde_json::from_reader(reader)?;
@@ -46,8 +46,8 @@ pub fn parse_source_map_from_string(source_map: &str) -> Result<SourceMap> {
     create_source_map(parsed)
 }
 
-pub fn save_source_content(save_path: &str, source_path: &str, content: &str) -> Result<()> {
-    let full_path = format!("{}{}", save_path, source_path);
+pub fn save_source_content(save_path: &PathBuf, source_path: &str, content: &str) -> Result<()> {
+    let full_path = format!("{:?}{}", save_path, source_path);
     let path = Path::new(&full_path);
     std::fs::create_dir_all(path.parent().unwrap())?;
     let mut file_handle = File::create(path)?;

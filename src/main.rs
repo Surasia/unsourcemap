@@ -1,6 +1,8 @@
 pub mod loader;
 pub mod parser;
 
+use std::path::PathBuf;
+
 use anyhow::Result;
 use clap::Parser;
 use loader::{parse_source_map, parse_source_map_from_string, save_source_content};
@@ -12,10 +14,10 @@ use loader::{parse_source_map, parse_source_map_from_string, save_source_content
 struct Unsourcemap {
     #[arg(short, long)]
     /// Path to source map file (optional).
-    file_path: Option<String>,
+    file_path: Option<PathBuf>,
     #[arg(short = 'S', long)]
     /// Path to the location to save to (optional).
-    save_path: Option<String>,
+    save_path: Option<PathBuf>,
     #[arg(short, long)]
     /// Source map content as a string (optional).
     source_map: Option<String>,
